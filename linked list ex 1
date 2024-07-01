@@ -1,94 +1,166 @@
-class Stack {
-    
-    private int top; 
-    private int maxSize; 
-    private int[] arr;
+class Node {
+    private String data;
+    private Node next;
 
-    Stack(int maxSize) {
-        this.top = -1; 
-        this.maxSize = maxSize;
-        arr = new int[maxSize];
+    public Node(String data) {
+        this.data = data;
     }
 
-    public boolean isFull() {
-        if (top >= (maxSize - 1)) {
-            return true;
-        }
-        return false;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public boolean push(int data) {
-        if (isFull()) {
-            return false;
-        }
-        else {
-            arr[++top] = data;
-            return true;
-        }
+    public void setNext(Node node) {
+        this.next = node;
     }
 
-    public int peek() {
-        if (isEmpty())
-            return Integer.MIN_VALUE;
-        else
-            return arr[top];
+    public String getData() {
+        return this.data;
     }
 
-    public void display() {
-        if (isEmpty())
-            System.out.println("Stack is empty!");
-        else {
-            System.out.println("Displaying stack elements");
-            for (int index = top; index >= 0; index--) {
-                System.out.println(arr[index]); // accessing element at position index
-            }
-        }
-    }
-
-    public boolean isEmpty() {
-        if (top < 0) {
-            return true;
-        }
-        return false;
-    }
-
-    public int pop() {
-        if (isEmpty())
-            return Integer.MIN_VALUE;
-        else
-            return arr[top--];
+    public Node getNext() {
+        return this.next;
     }
 }
 
+class LinkedList {
+    private Node head;
+    private Node tail;
 
-class Tester {
-      
-    public static void main(String args[]) {
-            
-        Stack stack = new Stack(10);
-        stack.push(15);
-        stack.push(25);
-        stack.push(30);
-        stack.push(40);
-            
-        stack.display();
-            
-        if (checkTop(stack)) {
-            System.out.println("The top most element of the stack is an even number");
+    public Node getHead() {
+        return this.head;
+    }
+
+    public Node getTail() {
+        return this.tail;
+    }
+
+    public void addAtEnd(String data) {
+        Node node = new Node(data);
+
+        if (this.head == null) {
+            this.head = this.tail = node;
         } else {
-            System.out.println("The top most element of the stack is an odd number");
+            this.tail.setNext(node);
+            this.tail = node;
         }
     }
 
-    public static boolean checkTop(Stack stack) {
-      
-        int topElement = stack.peek();
-       
-        if (topElement % 2 == 0) {
-            return true;
+    public void addAtBeginning(String data) {
+        Node node = new Node(data);
+
+        if (this.head == null) {
+            this.head = this.tail = node;
         } else {
-            return false;
+            node.setNext(this.head);
+            this.head = node;
         }
+    }
+
+    public void display() {
+        Node temp = this.head;
+
+        while (temp != null) {
+            System.out.println(temp.getData());
+            temp = temp.getNext();
+        }
+    }
+
+    public Node find(String data) {
+        Node temp = this.head;
+
+        while (temp != null) {
+            if (temp.getData().equals(data))
+                return temp;
+            temp = temp.getNext();
+        }
+        return null;
+    }
+
+    public void insert(String data, String dataBefore) {
+        Node node = new Node(data);
+
+        if (this.head == null)
+            this.head = this.tail = node;
+        else {
+            Node nodeBefore = this.find(dataBefore);
+            if (nodeBefore != null) {
+                node.setNext(nodeBefore.getNext());
+                nodeBefore.setNext(node);
+                if (nodeBefore == this.tail)
+                    this.tail = node;
+            } else
+                System.out.println("Node not found");
+        }
+    }
+
+    public void delete(String data) {
+        if (this.head == null) {
+            System.out.println("List is empty");
+        } else {
+            Node node = this.find(data);
+
+            if (node == null) {
+                System.out.println("Node not found");
+            }
+
+            if (node == this.head) {
+                this.head = this.head.getNext();
+                node.setNext(null);
+
+                if (node == this.tail)
+                    tail = null;
+            } else {
+                Node nodeBefore = null;
+                Node temp = this.head;
+                while (temp != null) {
+                    if (temp.getNext() == node) {
+                        nodeBefore = temp;
+                        break;
+                    }
+                    temp = temp.getNext();
+                }
+
+                nodeBefore.setNext(node.getNext());
+
+                if (node == this.tail)
+                    this.tail = nodeBefore;
+                node.setNext(null);
+            }
+        }
+    }
+}
+
+class Tester {
+    public static void main(String args[]) {
+        LinkedList linkedList = new LinkedList();
+        linkedList.addAtEnd("AB");
+        linkedList.addAtEnd("BC");
+        linkedList.addAtEnd("CD");
+        linkedList.addAtEnd("DE");
+        linkedList.addAtEnd("EF");
+
+        String elementToBeFound = "CD";
+        int position = findPosition(elementToBeFound, linkedList.getHead());
+        if (position != 0)
+            System.out.println("The position of the element is " + position);
+        else
+            System.out.println("The element is not found!");
+    }
+
+    public static int findPosition(String element, Node head) {
+        Node current = head;
+        int index = 1;
+
+        while (current != null) {
+            if (current.getData().equals(element)) {
+                return index;
+            }
+            current = current.getNext();
+            index++;
+        }
+
+        return 0; // Element not found
     }
 }
 
