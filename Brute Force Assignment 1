@@ -1,21 +1,12 @@
 class Tester {
 
     public static int[][] multiply(int arr1[][], int arr2[][]) {
-        int m = arr1.length;
-        int n = arr1[0].length;
-        int p = arr2[0].length;
-
-        // Check if matrices can be multiplied
-        if (arr2.length != n) {
-            throw new IllegalArgumentException("Matrices cannot be multiplied");
-        }
-
-        // Initialize the resulting matrix arr3 of size m x p
-        int[][] arr3 = new int[m][p];
+        int n = arr1.length;
+        int[][] arr3 = new int[n][n];
 
         // Perform matrix multiplication
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < p; j++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 arr3[i][j] = 0;
                 for (int k = 0; k < n; k++) {
                     arr3[i][j] += arr1[i][k] * arr2[k][j];
@@ -34,7 +25,7 @@ class Tester {
 
         // Print the resulting matrix arr3
         for (int i = 0; i < arr3.length; i++) {
-            for (int j = 0; j < arr3[0].length; j++) {
+            for (int j = 0; j < arr3.length; j++) {
                 System.out.print(arr3[i][j] + " ");
             }
             System.out.println();
